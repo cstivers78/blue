@@ -20,22 +20,24 @@ The difference between two integers `a` and `b` and returns an integer.
 
 1. Start sbt from `/blue` directory. 
 
-    $ cd blue
-    $ sbt
-    >
+        $ cd blue
+        $ sbt
+        >
 
 2. Switch to the REST example:
 
-    > project ex-rest
-    [info] Set current project to ex-rest (in build file:[...]/blue/)
+        > project ex-rest
+        [info] Set current project to ex-rest (in build file:[...]/blue/)
 
 3. Run
 
-    > run
-    [info] ...
-    [info] Running main
+        > run
+        [info] ...
+        [info] Running main
 
 4. Try
 
-    $ curl "http://localhost:8080/add?a=1&b=2"
-    3
+        $ curl "http://localhost:8080/add?a=1&b=2"
+        3
+
+FIN.
