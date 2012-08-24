@@ -61,7 +61,7 @@ import us.stivers.blue.http.{Request,Response,Status}
  *
  *
  */
-@implicitNotFound("Cannot find Responder for ${A}") 
+// @implicitNotFound("Cannot find Responder for ${A}") 
 trait Responder[A] extends ((Request,Route,A)=>Try[Response])
 
 object Responder {

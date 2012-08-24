@@ -2,8 +2,8 @@ package us.stivers.blue.route.parser
 
 import scalax.util.{Try,Success,Failure}
 import us.stivers.blue.codec.{ContentDecoder,ParameterDecoder}
-import us.stivers.blue.http.{Request}
-import us.stivers.blue.route.{Route,Segment}
+import us.stivers.blue.http.{Request,Status}
+import us.stivers.blue.route.{Route,RouteException,Segment}
 
 /**
  * Parses a value from a Request and Route.
@@ -13,7 +13,7 @@ trait Parser[A] extends ((Request,Route) => Try[A])
 /**
  * Build in Parsers
  */
-object Parser {
+object Parser extends ParserResponder {
 
   /**
    * "Factory" method. This is for convenience in creating a new Parser.
@@ -136,9 +136,17 @@ object Parser {
     
     def ^[T](f: (A,B,C,D,E,F,G,H,I,J)=>T) = Parser{ this(_,_).map(f.tupled) }
   }
-
 }
 
+trait ParserResponder {
+  import scalax.util.{Try}
+  import us.stivers.blue.http.{Request,Response,Content}
+  import us.stivers.blue.route.{Responder}
+
+  implicit def ParserResponder[A: Responder]: Responder[Parser[A]] = new Responder[Parser[A]] {
+    def apply(req: Request, route: Route, p: Parser[A]) = p(req,route).flatMap(a => implicitly[Responder[A]].apply(req,route,a))
+  }
+}
 
 trait Parsers {
 
@@ -146,7 +154,7 @@ trait Parsers {
    * Parses named values from a Request's Query String.
    */
   def query[A: ParameterDecoder](name: String) = Parser[A]{ (req, route) =>
-    req.uri.query.get(name).flatMap(_.headOption).map(implicitly[ParameterDecoder[A]]).getOrElse(Failure(new Exception("damn")))
+    req.uri.query.get(name).flatMap(_.headOption).map(implicitly[ParameterDecoder[A]]).getOrElse(Failure(RouteException(req,Status.BadRequest)))
   }
 
   /**

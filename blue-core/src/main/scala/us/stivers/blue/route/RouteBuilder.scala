@@ -1,11 +1,12 @@
 package us.stivers.blue.route
 
 import scalax.util.{Try,Success,Failure}
-import us.stivers.blue.http.{Request,Response,Method,Status}
+import us.stivers.blue.http.{Request,Response,Method,Methods,Status}
+import us.stivers.blue.route.parser.{Parsers}
 import us.stivers.blue.uri.{Path}
 import Route._
 
-trait RouteBuilder {
+trait RouteBuilder extends RouteSet with Methods  {
 
   implicit def MethodToRouteMethod(m: Method): RouteMethod = RouteMethod(m)
   implicit def SegmentListToRoutePath(p: List[Segment]): RoutePath = RoutePath(p)

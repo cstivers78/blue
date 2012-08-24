@@ -24,4 +24,8 @@ object Build extends Build with Common {
 
   // Integrations
   lazy val finagle = Project("finagle", file("blue-finagle")) settings (common:_*) dependsOn (core)
+
+  // Examples
+  lazy val exampleSimple  = Project("ex-rails", file("blue-examples/rails")) settings (common:_*) dependsOn (core, json, xml, finagle)
+  lazy val exampleRails   = Project("ex-rest",  file("blue-examples/rest")) settings (common:_*) dependsOn (core, json, xml, mustache, finagle)
 }

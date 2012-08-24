@@ -9,19 +9,7 @@ sealed class Method(val name: String) {
   override def hashCode = name.hashCode
 }
 
-object Method {
-
-  val Connect   = new Method("CONNECT")
-  val Delete    = new Method("DELETE")
-  val Get       = new Method("GET")
-  val Head      = new Method("HEAD")
-  val Options   = new Method("OPTIONS")
-  val Patch     = new Method("PATCH")
-  val Post      = new Method("POST")
-  val Put       = new Method("PUT")
-  val Trace     = new Method("TRACE")
-  val Any       = new Method("*")
-
+object Method extends Methods {
   def apply(name: String): Method = name.toUpperCase match {
     case Connect.name => Connect
     case Delete.name  => Delete
@@ -32,6 +20,19 @@ object Method {
     case Post.name    => Post
     case Put.name     => Put
     case Trace.name   => Trace
-    case _            => new Method(name){}
+    case name         => new Method(name)
   }
+}
+
+trait Methods {
+  val Connect   = new Method("CONNECT")
+  val Delete    = new Method("DELETE")
+  val Get       = new Method("GET")
+  val Head      = new Method("HEAD")
+  val Options   = new Method("OPTIONS")
+  val Patch     = new Method("PATCH")
+  val Post      = new Method("POST")
+  val Put       = new Method("PUT")
+  val Trace     = new Method("TRACE")
+  val Any       = new Method("*")
 }
